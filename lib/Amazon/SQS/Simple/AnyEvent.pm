@@ -204,35 +204,32 @@ use Amazon::SQS::Simple::AnyEvent;
 my $sqs = Amazon::SQS::Simple->new($access_key, $secret_key);
 my $queue = $sqs->GetQueue($endpoint);
 
-my $callback = sub {
-  my $message = shift;
-  # do something with message...
-};
+my $cb = sub {my $message = shift};
 
-my $msg = $queue->ReceiveMessage();       # Blocking
+my $msg   = $queue->ReceiveMessage();     # Blocking
 my $guard = $queue->ReceiveMessage($cb);  # Non-blocking
 
 # do something else...
 
 =head1 DESCRIPTION
 
-This module is a mixin that adds non-blocking capbilities to
-L<Amazon::SQS::Simple> via L<AnyEvent>.
+This module adds non-blocking capbilities to L<Amazon::SQS::Simple>
+via L<AnyEvent>. It works by hijacking and replacing methods inside
+the C<Amazon::SQS::Simple> namespace. However, this could easily break
+if the internals of L<Amazon::SQS::Simple> change.  You have been
+warned.
 
 =head1 METHODS
 
 The following methods on L<Amazon::SQS::Simple::Queue> are enhanced
 with non-blocking capabiliites. In all cases, adding a subroutine
 reference as the last argument will cause the method to be called in
-non-blocking mode. If the request is successful, your callback will
-receive the message body as the only argument. The method itself will
-return an C<AnyEvent::Util::guard> object.
-
+non-blocking mode. If the underlying method is successful, your
+callback will receive its results as arguments, or undef on failure.
 Otherwise, the calling interfaces are exactly the same as those
-described in L<Amazon::SQS::Simple::Queue>. In fact, if you do not
-pass a callback argument, then the call is sent straight to the
-original blocking method in L<Amazon::SQS::Simple>. Any method
-not listed here does not have non-blocking capabilities.
+described in L<Amazon::SQS::Simple::Queue>. If you do not pass a
+callback argument, then the call is sent straight to the original
+blocking method in L<Amazon::SQS::Simple>.
 
 =over 4
 
@@ -254,24 +251,23 @@ not listed here does not have non-blocking capabilities.
 
 Jeffrey Ryan Thalhammer <jeff@thaljef.org>
 
-=head1 CREDITS
-
-The original authors of L<Amazon::SQS::Simple>:
+Mike Whitaker <penfold@cpan.org>
 
 Simon Whitaker <swhitaker@cpan.org>
 
-Mike Whitaker <penfold@cpan.org>
+=head1 SPONSOR
+
+This module was commissioned by Ultrabuys LLC. Ultrabuys is proud to
+support Perl and the open source community.
 
 =head1 LICENSE
 
-This program is free software; you can redistribute it and/or modify it
-under the same terms as Perl itself.
+This program is free software; you can redistribute it and/or modify
+it under the same terms as Perl itself.
 
 =head1 COPYRIGHT
 
 Copyright (c) 2015 by Jeffrey Ryan Thalhammer
-
-=cut
 
 =cut
 
