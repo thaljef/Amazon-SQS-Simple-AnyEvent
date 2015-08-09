@@ -10,7 +10,7 @@ WriteMakefile(
     PREREQ_PM => {
         'Test::More'          => 0,
         'AnyEvent::HTTP'      => 0,
-        'Amazon::SQS::Simple' => 0,
+        'Amazon::SQS::Simple' => 2.04,
         'XML::Simple'         => 0,
     },
     clean => {

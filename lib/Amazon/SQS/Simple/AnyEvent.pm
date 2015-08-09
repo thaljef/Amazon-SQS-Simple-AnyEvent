@@ -3,14 +3,16 @@ package Amazon::SQS::Simple::AnyEvent;
 use strict;
 use warnings;
 
-use AnyEvent::HTTP;
 use Amazon::SQS::Simple;
 use Amazon::SQS::Simple::Base;
-use XML::Hash::XS;
+use Amazon::SQS::Simple::Queue;
+use AnyEvent::HTTP;
+use XML::Simple;
 
 #------------------------------------------------------------------------------
 
 our $VERSION = 0.01;
+our $ERROR;
 
 #------------------------------------------------------------------------------
 # Replace methods in Amazon::SQS::Simple with ones that call our non-blocking
@@ -159,11 +161,11 @@ sub _dispatch {
         my ($content, $headers) = @_;
         $self->_debug_log($content);
         if ($headers->{Status} =~ /^2/) {
-            my $href = xml2hash($content, force_array => $force_array);
+            my $href =  XMLin($content, ForceArray => $force_array, KeyAttr => {});
             $cb->($href);
         }
         else {
-            warn "ERROR: $headers->{Status} $headers->{Reason}";
+            $ERROR = "$headers->{Status} $headers->{Reason}";
             $cb->();
         }
     };
