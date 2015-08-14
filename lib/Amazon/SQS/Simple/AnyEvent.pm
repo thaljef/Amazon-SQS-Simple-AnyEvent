@@ -201,18 +201,18 @@ Amazon::SQS::Simple::AnyEvent - A non-blocking API to Amazon's SQS
 
 =head1 SYNOPSIS
 
-use Amazon::SQS::Simple;
-use Amazon::SQS::Simple::AnyEvent;
+  use Amazon::SQS::Simple;
+  use Amazon::SQS::Simple::AnyEvent;
 
-my $sqs = Amazon::SQS::Simple->new($access_key, $secret_key);
-my $queue = $sqs->GetQueue($endpoint);
+  my $sqs = Amazon::SQS::Simple->new($access_key, $secret_key);
+  my $queue = $sqs->GetQueue($endpoint);
 
-my $cb = sub {my $message = shift};
+  my $cb = sub {my $message = shift};
 
-my $msg   = $queue->ReceiveMessage();     # Blocking
-my $guard = $queue->ReceiveMessage($cb);  # Non-blocking
+  my $msg   = $queue->ReceiveMessage();     # Blocking
+  my $guard = $queue->ReceiveMessage($cb);  # Non-blocking
 
-# do something else...
+  # do something else...
 
 =head1 DESCRIPTION
 
