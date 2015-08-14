@@ -216,16 +216,17 @@ Amazon::SQS::Simple::AnyEvent - A non-blocking API to Amazon's SQS
 
 =head1 DESCRIPTION
 
-This module adds non-blocking capbilities to L<Amazon::SQS::Simple>
-via L<AnyEvent>. It works by hijacking and replacing methods inside
-the C<Amazon::SQS::Simple> namespace. However, this could easily break
-if the internals of L<Amazon::SQS::Simple> change.  Also, this code is
-alpha quality with no automated tests. You have been warned.
+This module transparently adds non-blocking capbilities to
+L<Amazon::SQS::Simple> via L<AnyEvent>. It works by hijacking and
+replacing methods inside the C<Amazon::SQS::Simple>
+namespace. However, this could easily break if the internals of
+L<Amazon::SQS::Simple> change.  Also, this code is alpha quality with
+no automated tests. You have been warned.
 
 =head1 METHODS
 
 The following methods on L<Amazon::SQS::Simple::Queue> are enhanced
-with non-blocking capabiliites. In all cases, adding a subroutine
+with non-blocking capabilities. In all cases, adding a subroutine
 reference as the last argument will cause the method to be called in
 non-blocking mode. But instead of returning the results at the method
 call site, they will be passed to your callback. If the request fails,
