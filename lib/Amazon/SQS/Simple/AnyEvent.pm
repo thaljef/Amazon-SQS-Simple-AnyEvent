@@ -33,7 +33,8 @@ while (my ($prefix, $methods) = each %methods) {
     for my $method (@$methods) {
         no warnings; no strict qw(refs);
         my $full_name = $prefix . "::" . $method;
-        my $original  = *{$full_name}{CODE};
+        my $original  = *{$full_name}{CODE}
+            or die "Method $full_name not defined";
     
         *{$full_name} = sub {
             my $has_cb = ref $_[-1] eq "CODE";
