@@ -219,18 +219,21 @@ my $guard = $queue->ReceiveMessage($cb);  # Non-blocking
 This module adds non-blocking capbilities to L<Amazon::SQS::Simple>
 via L<AnyEvent>. It works by hijacking and replacing methods inside
 the C<Amazon::SQS::Simple> namespace. However, this could easily break
-if the internals of L<Amazon::SQS::Simple> change.  You have been
-warned.
+if the internals of L<Amazon::SQS::Simple> change.  Also, this code is
+alpha quality with no automated tests. You have been warned.
 
 =head1 METHODS
 
 The following methods on L<Amazon::SQS::Simple::Queue> are enhanced
 with non-blocking capabiliites. In all cases, adding a subroutine
 reference as the last argument will cause the method to be called in
-non-blocking mode. If the underlying method is successful, your
-callback will receive its results as arguments, or undef on failure.
-Otherwise, the calling interfaces are exactly the same as those
-described in L<Amazon::SQS::Simple::Queue>. If you do not pass a
+non-blocking mode. But instead of returning the results at the method
+call site, they will be passed to your callback. If the request fails,
+your callback will receive C<undef> and you can inspect the variable
+C<$Amazon::SQS::Simple::AnyEvent::ERROR> for a description of the last
+error. At the method call site, you will receive a guard object for
+the request. Otherwise, the calling interfaces are exactly the same as
+those described in L<Amazon::SQS::Simple::Queue>. If you do not pass a
 callback argument, then the call is sent straight to the original
 blocking method in L<Amazon::SQS::Simple>.
 
